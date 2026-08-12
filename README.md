@@ -47,25 +47,56 @@ npx serve .
 }
 ```
 
-## Деплой
+## Деплой на поддомен plugins.podlesnytwins.com
 
-### Vercel (рекомендуется, если основной сайт на Vercel)
-
-1. Закинуть папку в репозиторий.
-2. В Vercel создать проект и указать `podlesnytwins-plugins` как root directory.
-3. Настроить поддомен/путь: `podlesnytwins.com/plugins`.
-
-### Netlify / Cloudflare Pages
-
-Загрузить эту папку как статический сайт. Framework preset — None.
-
-### На существующий хостинг
-
-Скопировать файлы в директорию `/plugins` на сервере:
+### 1. Создать репозиторий на GitHub
 
 ```bash
-rsync -avz --exclude='.git' ./ user@host:/var/www/podlesnytwins.com/plugins/
+cd ~/podlesnytwins-plugins
+git remote add origin https://github.com/lesnycode/podlesnytwins-plugins.git
+git push -u origin main
 ```
+
+Если репозиторий ещё не создан — создай его вручную на https://github.com/new.
+
+### 2. Включить GitHub Pages
+
+1. Открыть репозиторий на GitHub → Settings → Pages.
+2. Source: Deploy from a branch.
+3. Branch: `main`, folder: `/ (root)`.
+4. Сохранить.
+5. В разделе «Custom domain» вписать: `plugins.podlesnytwins.com`.
+6. Поставить галочку «Enforce HTTPS» (после того как DNS обновится).
+
+Файл `CNAME` в репозитории уже содержит `plugins.podlesnytwins.com`, поэтому GitHub сам подтянет домен после пуша.
+
+### 3. Добавить запись в nic.ru
+
+В панели управления DNS домена `podlesnytwins.com` на nic.ru добавить запись:
+
+| Тип | Имя | Значение |
+|---|---|---|
+| CNAME | `plugins` | `lesnycode.github.io` |
+
+> Если аккаунт GitHub не `lesnycode` — подставь свой логин: `ВАШ_ЛОГИН.github.io`.
+
+После сохранения подождать 5–30 минут (иногда до 24 часов). Проверить:
+
+```bash
+dig plugins.podlesnytwins.com +short
+```
+
+Должно отдать что-то вроде:
+
+```
+lesnycode.github.io.
+185.199.108.153
+...
+```
+
+### 4. Проверить
+
+Открыть `https://plugins.podlesnytwins.com`.
 
 ## TODO
 
