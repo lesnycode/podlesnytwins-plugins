@@ -1,20 +1,176 @@
 document.documentElement.classList.add('js');
 
-/* Scroll reveal */
-const observer = new IntersectionObserver((entries) => {
-  entries.forEach((entry) => {
-    if (entry.isIntersecting) {
-      entry.target.classList.add('visible');
+/* ---------------------------------------------------------------------------
+   Reveal on scroll.
+   Only elements explicitly marked .reveal animate — never whole sections, so a
+   headless renderer, a background tab or a dead observer can't ship a blank
+   page. The failsafe below is the belt to that braces: whatever happens, the
+   content is visible within a second.
+--------------------------------------------------------------------------- */
+const revealables = document.querySelectorAll('.reveal');
+
+if (revealables.length) {
+  const show = (el) => el.classList.add('visible');
+
+  if ('IntersectionObserver' in window) {
+    const observer = new IntersectionObserver((entries, obs) => {
+      entries.forEach((entry) => {
+        if (entry.isIntersecting) {
+          show(entry.target);
+          obs.unobserve(entry.target);
+        }
+      });
+    }, { threshold: 0.15, rootMargin: '0px 0px -40px 0px' });
+
+    revealables.forEach((el) => observer.observe(el));
+  } else {
+    revealables.forEach(show);
+  }
+
+  window.setTimeout(() => revealables.forEach(show), 1200);
+}
+
+/* ---------------------------------------------------------------------------
+   Checkout: POST to the payment service, then hand the browser to Точка.
+   The site is static (GitHub Pages) and holds no secrets; everything that can
+   touch the bank account lives on api.podlesnytwins.com.
+--------------------------------------------------------------------------- */
+const API_BASE = 'https://api.podlesnytwins.com';
+const PRODUCT = 'ricochet';
+
+const dialog = document.getElementById('checkout');
+const form = document.getElementById('checkout-form');
+
+if (dialog && form) {
+  const errorBox = form.querySelector('.checkout-error');
+  const submit = form.querySelector('.checkout-submit');
+  const submitLabel = submit.textContent;
+
+  const showError = (text) => {
+    errorBox.textContent = text;
+    errorBox.hidden = false;
+  };
+
+  const clearError = () => {
+    errorBox.hidden = true;
+    errorBox.textContent = '';
+    form.querySelectorAll('[aria-invalid]').forEach((el) => el.removeAttribute('aria-invalid'));
+  };
+
+  const openCheckout = () => {
+    clearError();
+    if (typeof dialog.showModal === 'function') {
+      dialog.showModal();
+      window.setTimeout(() => form.querySelector('input[name="name"]').focus(), 60);
+    } else {
+      // No <dialog> support: fall back to the pricing block rather than nothing.
+      document.getElementById('pricing').scrollIntoView({ behavior: 'smooth' });
     }
+  };
+
+  document.querySelectorAll('[data-checkout]').forEach((btn) => {
+    btn.addEventListener('click', openCheckout);
   });
-}, {
-  threshold: 0.1,
-  rootMargin: '0px 0px -40px 0px'
-});
 
-document.querySelectorAll('.reveal').forEach((el) => observer.observe(el));
+  dialog.querySelectorAll('[data-checkout-close]').forEach((btn) => {
+    btn.addEventListener('click', () => dialog.close());
+  });
 
-/* Autopan comparison animation */
+  // Click on the backdrop closes; clicks inside the card must not.
+  dialog.addEventListener('click', (e) => {
+    if (e.target === dialog) dialog.close();
+  });
+
+  form.addEventListener('submit', async (e) => {
+    e.preventDefault();
+    clearError();
+
+    const name = form.elements.name.value.trim();
+    const email = form.elements.email.value.trim();
+    const consent = form.elements.consent.checked;
+
+    if (name.length < 2) {
+      form.elements.name.setAttribute('aria-invalid', 'true');
+      form.elements.name.focus();
+      return showError('Укажите имя — оно печатается в лицензии.');
+    }
+    if (!/^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(email)) {
+      form.elements.email.setAttribute('aria-invalid', 'true');
+      form.elements.email.focus();
+      return showError('Проверьте адрес почты — на него уйдёт файл лицензии.');
+    }
+    if (!consent) {
+      form.elements.consent.focus();
+      return showError('Без согласия на обработку данных мы не сможем выдать лицензию.');
+    }
+
+    submit.disabled = true;
+    submit.textContent = 'Готовим оплату…';
+
+    try {
+      const res = await fetch(`${API_BASE}/api/checkout`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ product: PRODUCT, email, name })
+      });
+
+      if (res.status === 503) {
+        throw new Error('Приём оплаты ещё настраивается. Напишите на support@podlesnytwins.com — вышлем счёт вручную.');
+      }
+      if (!res.ok) {
+        throw new Error('Банк не принял заявку на оплату. Попробуйте ещё раз или напишите на support@podlesnytwins.com.');
+      }
+
+      const data = await res.json();
+      if (!data.url) throw new Error('Сервис оплаты не вернул ссылку. Напишите на support@podlesnytwins.com.');
+
+      window.location.href = data.url;
+      return;
+    } catch (err) {
+      const offline = err instanceof TypeError;
+      showError(offline
+        ? 'Не удалось связаться с сервисом оплаты. Проверьте соединение и попробуйте ещё раз.'
+        : err.message);
+    }
+
+    submit.disabled = false;
+    submit.textContent = submitLabel;
+  });
+}
+
+/* ---------------------------------------------------------------------------
+   Sticky buy bar (mobile). Appears once the hero CTA is out of sight, hides
+   again over the pricing block where a real button is already on screen.
+--------------------------------------------------------------------------- */
+const buybar = document.querySelector('.buybar');
+const heroActions = document.querySelector('.hero-actions');
+const pricing = document.getElementById('pricing');
+
+if (buybar && heroActions && 'IntersectionObserver' in window) {
+  const visible = { hero: true, pricing: false };
+
+  const sync = () => {
+    const show = !visible.hero && !visible.pricing;
+    buybar.hidden = false;
+    buybar.classList.toggle('is-shown', show);
+  };
+
+  new IntersectionObserver(([entry]) => {
+    visible.hero = entry.isIntersecting;
+    sync();
+  }, { threshold: 0 }).observe(heroActions);
+
+  if (pricing) {
+    new IntersectionObserver(([entry]) => {
+      visible.pricing = entry.isIntersecting;
+      sync();
+    }, { threshold: 0 }).observe(pricing);
+  }
+}
+
+/* ---------------------------------------------------------------------------
+   Autopan comparison animation
+--------------------------------------------------------------------------- */
 const canvas = document.getElementById('autopan-canvas');
 if (canvas) {
   const ctx = canvas.getContext('2d');
@@ -95,8 +251,6 @@ if (canvas) {
     ctx.lineCap = 'round';
     ctx.lineJoin = 'round';
 
-    // We draw the pan line as a path that is already fully formed;
-    // the "playhead" reveals the transient interaction.
     ctx.beginPath();
     if (isRicochet) {
       // Step at lookahead point (30 ms before transient)
@@ -143,34 +297,33 @@ if (canvas) {
         ctx.fill();
       }
 
-      // Label under spike
+      // Outcome label to the right of the spike, clear of other elements
       const label = isRicochet ? 'переход закончен' : 'атака размазана';
-      drawText(label, TRANSIENT_X, baseY + 84, 11, accent, 500, 'center');
+      const labelX = TRANSIENT_X + 52;
+      const labelY = baseY - spikeH / 2;
+
+      ctx.strokeStyle = accent;
+      ctx.lineWidth = 1;
+      ctx.globalAlpha = 0.5;
+      ctx.beginPath();
+      ctx.moveTo(TRANSIENT_X + 14, labelY);
+      ctx.lineTo(labelX - 8, labelY);
+      ctx.stroke();
+      ctx.globalAlpha = 1;
+
+      ctx.fillStyle = accent;
+      ctx.beginPath();
+      ctx.arc(labelX - 4, labelY, 2, 0, Math.PI * 2);
+      ctx.fill();
+
+      drawText(label, labelX, labelY, 12, accent, 500, 'left');
     }
-
-    // Time axis
-    ctx.strokeStyle = colors.muted;
-    ctx.lineWidth = 1;
-    ctx.beginPath();
-    ctx.moveTo(PADDING, baseY + 96);
-    ctx.lineTo(W - PADDING, baseY + 96);
-    ctx.stroke();
-
-    // Arrow
-    ctx.beginPath();
-    ctx.moveTo(W - PADDING, baseY + 96);
-    ctx.lineTo(W - PADDING - 6, baseY + 92);
-    ctx.lineTo(W - PADDING - 6, baseY + 100);
-    ctx.closePath();
-    ctx.fillStyle = colors.muted;
-    ctx.fill();
   }
 
   function render() {
     const now = performance.now();
     const t = (now % LOOP_MS) / LOOP_MS;
 
-    // Background
     ctx.fillStyle = colors.bg;
     ctx.fillRect(0, 0, W, H);
 

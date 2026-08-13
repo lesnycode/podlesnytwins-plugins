@@ -5,111 +5,128 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Ricochet — transient-triggered autopan от Podlesny Twins</title>
   <meta name="description" content="Ricochet запускает панорамирование от каждого транзиента. 30 мс lookahead: перемещение заканчивается до атаки.">
+  <link rel="canonical" href="https://plugins.podlesnytwins.com/ricochet/">
+  <link rel="icon" href="assets/favicon.svg" type="image/svg+xml">
+
+  <meta property="og:type" content="product">
+  <meta property="og:site_name" content="Podlesny Twins">
+  <meta property="og:locale" content="ru_RU">
+  <meta property="og:url" content="https://plugins.podlesnytwins.com/ricochet/">
+  <meta property="og:title" content="Ricochet — панорамирование от удара, а не от LFO">
+  <meta property="og:description" content="30 мс lookahead: переход заканчивается до того, как слышен атакующий фронт. VST3 / AU / Standalone.">
+  <meta property="og:image" content="https://plugins.podlesnytwins.com/ricochet/assets/ricochet-ui.png">
+  <meta property="og:image:width" content="1040">
+  <meta property="og:image:height" content="560">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="Ricochet — панорамирование от удара, а не от LFO">
+  <meta name="twitter:description" content="30 мс lookahead: переход заканчивается до того, как слышен атакующий фронт.">
+  <meta name="twitter:image" content="https://plugins.podlesnytwins.com/ricochet/assets/ricochet-ui.png">
+
   <link rel="stylesheet" href="styles.css">
 </head>
 <body>
 
   <header class="site-header">
     <div class="container header-inner">
-      <a href="#" class="logo">Podlesny Twins</a>
+      <a href="/" class="logo">Podlesny&nbsp;Twins</a>
       <nav class="nav">
         <a href="#problem">Проблема</a>
         <a href="#how">Как работает</a>
         <a href="#controls">Контролы</a>
-        <a href="#pricing">Цена</a>
         <a href="#faq">FAQ</a>
       </nav>
+      <button class="btn btn-primary btn-small header-buy" data-checkout>Купить — 2 900 ₽</button>
     </div>
   </header>
 
   <main>
 
     <section class="hero">
-      <div class="container">
-        <p class="hero-meta">VST3 / AU / Standalone · macOS / Windows</p>
-        <h1>Каждый транзиент — на другую сторону.</h1>
-        <p class="hero-sub">Ricochet запускает панорамирование от удара, а не от такта или LFO. 30 мс lookahead: перемещение заканчивается до того, как слышен атакующий фронт.</p>
-        <div class="hero-actions">
-          <a class="btn btn-primary" href="#pricing">Купить — $29</a>
-          <a class="btn btn-secondary" href="#faq">Скачать демо</a>
+      <div class="container hero-grid">
+        <div class="hero-copy">
+          <p class="hero-meta">VST3 / AU / Standalone · macOS / Windows</p>
+          <h1>Каждый транзиент — на другую сторону.</h1>
+          <p class="hero-sub">Ricochet запускает панорамирование от удара, а не от такта или LFO. 30 мс lookahead: перемещение заканчивается до того, как слышен атакующий фронт.</p>
+          <div class="hero-actions">
+            <button class="btn btn-primary btn-large" data-checkout>Купить — 2 900 ₽</button>
+            <a class="btn btn-secondary btn-large" href="#faq">Демо-версия</a>
+          </div>
+          <p class="hero-fine">Оплата картой или СБП. Лицензия навсегда, один платёж.</p>
         </div>
         <figure class="hero-shot">
-          <img src="assets/ricochet-ui.png" alt="Интерфейс плагина Ricochet: дисплей Movement, Last Event, секции Trigger и Motion." width="1040" height="560" loading="eager">
+          <img src="assets/ricochet-ui.png" alt="Интерфейс плагина Ricochet: дисплей Movement, Last Event, секции Trigger и Motion." width="1040" height="560" loading="eager" fetchpriority="high">
         </figure>
       </div>
     </section>
 
-    <section id="problem" class="problem section reveal">
+    <section id="problem" class="problem section">
       <div class="container split">
         <div class="text">
           <h2>Обычный автопан ломает атаку.</h2>
           <p>LFO-паннеры и шаблонные автопаны двигают сигнал по расписанию. Они не знают, где удар. Часть атаки оказывается слева, часть — справа, потому что панорамный переход начинается или обрывается внутри транзиента. Удар размазывается по стереополю.</p>
-          <p>Если нужно было поставить один конкретный хит в конкретное место стерео, обычные плагины не справлялись: либо удар размазывался между каналами, либо приходилось править автоматизацию вручную. Ricochet делает это детекцией транзиентов и 30 мс lookahead.</p>
+          <p>Если нужно поставить один конкретный хит в конкретное место стерео, обычные плагины не справляются: либо удар размазывается между каналами, либо приходится править автоматизацию вручную. Ricochet делает это детекцией транзиентов и 30 мс lookahead.</p>
         </div>
-        <div class="diagram diagram--canvas">
+        <div class="diagram diagram--canvas reveal">
           <canvas id="autopan-canvas" width="560" height="360" aria-label="Анимация: обычный автопан размазывает атаку, Ricochet завершает переход до неё"></canvas>
         </div>
       </div>
     </section>
 
-    <section id="how" class="how section reveal">
+    <section id="how" class="how section">
       <div class="container">
         <h2>Один удар — один чистый переход.</h2>
-        <div class="steps">
-          <div class="step">
+        <ol class="steps">
+          <li class="step">
             <span class="step-num">1</span>
             <h3>Детекция</h3>
             <p>Ricochet слушает side-chain-сигнал и фиксирует каждый транзиент по порогу. Нет MIDI, нет темпосинхронизации, нет редактора паттернов.</p>
-          </div>
-          <div class="step">
+          </li>
+          <li class="step">
             <span class="step-num">2</span>
             <h3>Lookahead</h3>
             <p>Плагин держит постоянный буфер в 30 мс. Как только детектор видит удар, панорамное перемещение стартует заранее.</p>
-          </div>
-          <div class="step">
+          </li>
+          <li class="step">
             <span class="step-num">3</span>
             <h3>Перемещение</h3>
             <p>По приходу атаки сигнал уже оказывается на противоположной стороне. Весь удар — с одного панорамного положения.</p>
-          </div>
-        </div>
-        <figure class="screenshot-wide">
-          <img src="assets/ricochet-ui.png" alt="Интерфейс Ricochet: дисплей Movement показывает чередование левого и правого панорамирования." width="1040" height="560" loading="lazy">
-        </figure>
+          </li>
+        </ol>
         <p class="section-note">Одинаковый вход + одинаковый START SIDE = одинаковый выход. Результат детерминирован.</p>
       </div>
     </section>
 
-    <section id="use-cases" class="use-cases section reveal">
+    <section id="use-cases" class="use-cases section">
       <div class="container">
         <h2>Где это применяется.</h2>
-        <div class="cases">
-          <article class="case">
-            <h3>Хай-хэты и перкуссия</h3>
-            <p>Хай-хэты смещаются влево-вправо по каждому удару, не скапливаясь в центре и не раздувая стереобазу искусственно.</p>
-          </article>
-          <article class="case">
-            <h3>Эд-libs</h3>
-            <p>Вокальные вставки перепрыгивают между каналами в ритм исполнения, а не по заранее заданной сетке.</p>
-          </article>
-          <article class="case">
-            <h3>Снейры и ударные элементы</h3>
-            <p>Стерео-движение перкуссии без фейзерных артефактов и widening-эффектов.</p>
-          </article>
-          <article class="case">
-            <h3>Всё, что играет человек</h3>
-            <p>Pan следует за музыкантом, а не за часами секвенсора.</p>
-          </article>
-        </div>
+        <dl class="cases">
+          <div class="case">
+            <dt>Хай-хэты и перкуссия</dt>
+            <dd>Смещаются влево-вправо по каждому удару, не скапливаясь в центре и не раздувая стереобазу искусственно.</dd>
+          </div>
+          <div class="case">
+            <dt>Эд-libs</dt>
+            <dd>Вокальные вставки перепрыгивают между каналами в ритм исполнения, а не по заранее заданной сетке.</dd>
+          </div>
+          <div class="case">
+            <dt>Снейры и ударные элементы</dt>
+            <dd>Стерео-движение перкуссии без фейзерных артефактов и widening-эффектов.</dd>
+          </div>
+          <div class="case">
+            <dt>Всё, что играет человек</dt>
+            <dd>Pan следует за музыкантом, а не за часами секвенсора.</dd>
+          </div>
+        </dl>
       </div>
     </section>
 
-    <section id="controls" class="controls section reveal">
+    <section id="controls" class="controls section">
       <div class="container">
         <h2>Чем управлять.</h2>
         <div class="control-grid">
-          <div class="control-shot">
+          <figure class="control-shot">
             <img src="assets/ricochet-ui.png" alt="Крупный план секций Trigger и Motion плагина Ricochet." width="1040" height="560" loading="lazy">
-          </div>
+          </figure>
           <div class="control-list">
             <div class="control-group">
               <h3>Trigger</h3>
@@ -154,28 +171,38 @@
       </div>
     </section>
 
-    <section id="themes" class="themes section reveal">
-      <div class="container split">
-        <div class="text">
-          <h2>Восемь цветовых тем.</h2>
-          <p>Интерфейс переключается между восемью темами. Работает в тёмной студии — без выжигания глаз и без ярких градиентов.</p>
+    <section id="themes" class="themes section">
+      <div class="container">
+        <div class="themes-head">
+          <h2>Восемь тем.</h2>
+          <p>Интерфейс переключается между восемью палитрами. Все — для тёмной студии: без выжигания глаз и без ярких градиентов.</p>
         </div>
+        <ul class="swatches">
+          <li class="swatch" style="--sw-bg:#0e0f11;--sw-panel:#141619;--sw-accent:#5fd6a8"><span class="swatch-chip"></span>Deep Teal</li>
+          <li class="swatch" style="--sw-bg:#100d0a;--sw-panel:#18130f;--sw-accent:#e0a15f"><span class="swatch-chip"></span>Amber</li>
+          <li class="swatch" style="--sw-bg:#130b08;--sw-panel:#1b110c;--sw-accent:#e8794a"><span class="swatch-chip"></span>Sunset</li>
+          <li class="swatch" style="--sw-bg:#0f0d13;--sw-panel:#16131c;--sw-accent:#b58cf0"><span class="swatch-chip"></span>Violet</li>
+          <li class="swatch" style="--sw-bg:#0c0f12;--sw-panel:#12161b;--sw-accent:#5fb8e0"><span class="swatch-chip"></span>Ice</li>
+          <li class="swatch" style="--sw-bg:#06080e;--sw-panel:#0c0f18;--sw-accent:#889cdd"><span class="swatch-chip"></span>Cobalt Steel</li>
+          <li class="swatch" style="--sw-bg:#0e0f11;--sw-panel:#141718;--sw-accent:#9faebc"><span class="swatch-chip"></span>Graphite Nickel</li>
+          <li class="swatch" style="--sw-bg:#120c07;--sw-panel:#1c1209;--sw-accent:#ec7f30"><span class="swatch-chip"></span>Tube Glow</li>
+        </ul>
         <figure class="theme-shot">
           <img src="assets/ricochet-ui.png" alt="Интерфейс Ricochet в теме Deep Teal." width="1040" height="560" loading="lazy">
-          <figcaption>Deep Teal</figcaption>
+          <figcaption>Deep Teal — тема по умолчанию</figcaption>
         </figure>
       </div>
     </section>
 
-    <section id="pricing" class="pricing section reveal">
+    <section id="pricing" class="pricing section">
       <div class="container pricing-inner">
-        <h2>Цена.</h2>
-        <div class="price-card">
-          <div class="price">
-            <span class="price-current">$29</span>
-            <span class="price-regular">$39</span>
-          </div>
-          <p class="price-note">Launch price. Лицензия навсегда, один платёж.</p>
+        <div class="price-head">
+          <h2>Цена.</h2>
+          <p>Один платёж. Лицензия навсегда, на все ваши машины. Обновления в пределах текущей версии бесплатны.</p>
+        </div>
+        <div class="price-card reveal">
+          <p class="price"><span class="price-current">2 900</span><span class="price-cur">₽</span></p>
+          <p class="price-note">Цена запуска. Оплата картой или через СБП, чек приходит на почту.</p>
           <ul class="formats">
             <li>VST3</li>
             <li>AU</li>
@@ -183,13 +210,13 @@
             <li>macOS</li>
             <li>Windows</li>
           </ul>
-          <a class="btn btn-primary btn-large" href="#pricing">Купить Ricochet</a>
-          <p class="price-guarantee">30-day money-back guarantee.</p>
+          <button class="btn btn-primary btn-large" data-checkout>Купить Ricochet</button>
+          <p class="price-guarantee">Файл лицензии приходит на почту сразу после оплаты. Не подошло — вернём деньги в течение 30 дней.</p>
         </div>
       </div>
     </section>
 
-    <section id="faq" class="faq section reveal">
+    <section id="faq" class="faq section">
       <div class="container faq-inner">
         <h2>Вопросы.</h2>
         <details>
@@ -213,6 +240,14 @@
           <p>Да. Демо полностью функциональна, но периодически прерывает выходной сигнал. Сохранённые проекты загружаются нормально после покупки.</p>
         </details>
         <details>
+          <summary>Как приходит лицензия?</summary>
+          <p>Письмом на указанную при оплате почту, сразу после подтверждения платежа: файл лицензии и ссылка на установщик. Проверка лицензии проходит на вашей машине — интернет плагину не нужен.</p>
+        </details>
+        <details>
+          <summary>Можно ли оплатить не из России?</summary>
+          <p>Пока нет: оплата идёт в рублях, картой российского банка или через СБП. Если вы за пределами РФ — напишите на support@podlesnytwins.com, разберёмся индивидуально.</p>
+        </details>
+        <details>
           <summary>Какие форматы и платформы поддерживаются?</summary>
           <p>VST3, AU и Standalone для macOS и Windows.</p>
         </details>
@@ -224,15 +259,16 @@
   <footer class="site-footer">
     <div class="container footer-inner">
       <div class="footer-col">
-        <a href="#" class="logo">Podlesny Twins</a>
+        <a href="/" class="logo">Podlesny&nbsp;Twins</a>
         <p>Аудиоплагины для точного стерео-позиционирования.</p>
       </div>
       <div class="footer-col">
         <h4>Поддержка</h4>
         <ul>
+          <li><a href="/account/">Личный кабинет</a></li>
           <li><a href="mailto:support@podlesnytwins.com">support@podlesnytwins.com</a></li>
-          <li><a href="#">Лицензионное соглашение</a></li>
-          <li><a href="#">Политика конфиденциальности</a></li>
+          <li><a href="/legal/offer/">Публичная оферта</a></li>
+          <li><a href="/legal/privacy/">Политика обработки данных</a></li>
         </ul>
       </div>
     </div>
@@ -241,6 +277,52 @@
     </div>
   </footer>
 
+  <div class="buybar" hidden>
+    <span class="buybar-price">Ricochet — 2 900 ₽</span>
+    <button class="btn btn-primary btn-small" data-checkout>Купить</button>
+  </div>
+
+  <dialog id="checkout" class="checkout" aria-labelledby="checkout-title">
+    <button class="checkout-close" type="button" data-checkout-close aria-label="Закрыть">&times;</button>
+    <h2 id="checkout-title">Ricochet — 2 900 ₽</h2>
+    <p class="checkout-lead">Файл лицензии и ссылка на установщик придут на эту почту сразу после оплаты.</p>
+    <form id="checkout-form" novalidate>
+      <label class="field">
+        <span class="field-label">Имя и фамилия</span>
+        <input type="text" name="name" autocomplete="name" required maxlength="100" placeholder="Иван Петров">
+        <span class="field-hint">Имя печатается в файле лицензии и видно в окне плагина.</span>
+      </label>
+      <label class="field">
+        <span class="field-label">E-mail</span>
+        <input type="email" name="email" autocomplete="email" required inputmode="email" placeholder="you@studio.com">
+      </label>
+      <label class="check">
+        <input type="checkbox" name="consent" required>
+        <span>Согласен с <a href="/legal/offer/" target="_blank" rel="noopener">офертой</a> и <a href="/legal/privacy/" target="_blank" rel="noopener">политикой конфиденциальности</a>, разрешаю обработку моих данных для выдачи лицензии.</span>
+      </label>
+      <p class="checkout-error" role="alert" hidden></p>
+      <button class="btn btn-primary btn-large checkout-submit" type="submit">Перейти к оплате</button>
+      <p class="checkout-fine">Оплата на стороне Точка Банка. Карта или СБП, чек по 54-ФЗ на ту же почту.</p>
+    </form>
+  </dialog>
+
   <script src="script.js"></script>
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "Product",
+    "name": "Ricochet",
+    "description": "Transient-triggered autopan: панорамирование запускается от удара, 30 мс lookahead.",
+    "brand": { "@type": "Brand", "name": "Podlesny Twins" },
+    "image": "https://plugins.podlesnytwins.com/ricochet/assets/ricochet-ui.png",
+    "offers": {
+      "@type": "Offer",
+      "price": "2900",
+      "priceCurrency": "RUB",
+      "availability": "https://schema.org/InStock",
+      "url": "https://plugins.podlesnytwins.com/ricochet/"
+    }
+  }
+  </script>
 </body>
 </html>
