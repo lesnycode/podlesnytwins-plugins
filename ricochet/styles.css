@@ -285,9 +285,20 @@ p:last-child {
   padding: 24px;
 }
 
-.diagram svg {
+.diagram svg,
+.diagram canvas {
   width: 100%;
   height: auto;
+  display: block;
+}
+
+.diagram--canvas {
+  padding: 0;
+  overflow: hidden;
+}
+
+.diagram--canvas canvas {
+  border-radius: 12px;
 }
 
 /* Steps */
