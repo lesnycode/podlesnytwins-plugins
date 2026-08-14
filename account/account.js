@@ -222,8 +222,8 @@ function purchaseCard(p, limit) {
   const devHead = document.createElement('p');
   devHead.className = 'devices-head';
   devHead.textContent = p.devices.length
-    ? `Устройства: ${p.devices.length} из ${limit}`
-    : `Устройств пока нет. Лицензия работает на ${limit} машинах одновременно.`;
+    ? `Занято мест: ${p.devices.length} из ${limit}`
+    : `Места активации свободны: ${limit}`;
 
   card.append(head, actions, devHead);
   p.devices.forEach((d) => card.append(deviceRow(p, d, limit)));
@@ -231,7 +231,7 @@ function purchaseCard(p, limit) {
   if (p.devices.length) {
     const note = document.createElement('p');
     note.className = 'muted-note';
-    note.textContent = 'Отвязка освобождает место. Если на той машине продолжат работать, она появится снова — плагин не выключается и без интернета.';
+    note.textContent = 'Отвязка освобождает место для нового устройства. Она не удаляет установщик или файл лицензии с прежней машины.';
     card.append(note);
   }
 

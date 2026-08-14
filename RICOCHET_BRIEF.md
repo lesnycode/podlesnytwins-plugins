@@ -6,7 +6,7 @@
 
 ### Core mechanics
 - Every detected transient sends the source to the opposite side.
-- Constant 30 ms lookahead: the pan move finishes before the attack is audible.
+- The pan move finishes before the attack is audible.
 - No tempo sync, no pattern editor, no LFO, no MIDI trigger. Only audio triggers.
 - Deterministic: same input + same START SIDE = same output.
 
@@ -64,7 +64,7 @@ Premium plugin landing page in the spirit of Cradle's The God Particle:
 
 1. **Hero** — headline about the effect, subheadline about the problem, main UI screenshot, buy/demo CTAs.
 2. **The problem** — explain why regular autopans fail, with diagram or screenshot.
-3. **How it works** — transient detection + lookahead + pan move.
+3. **How it works** — transient detection + опережение + pan move.
 4. **Use cases** — hi-hats, ad-libs, snares.
 5. **Controls** — short description of each knob with UI crops.
 6. **Themes / UI** — mention 8 themes, show screenshot.

@@ -101,7 +101,7 @@ if (dialog && form) {
     }
     if (!consent) {
       form.elements.consent.focus();
-      return showError('Без согласия на обработку данных мы не сможем выдать лицензию.');
+      return showError('Примите публичную оферту, чтобы продолжить.');
     }
 
     submit.disabled = true;
@@ -212,7 +212,7 @@ if (canvas) {
 
   function drawScenario(baseY, isRicochet, t) {
     const name = isRicochet ? 'Ricochet' : 'Обычный автопан';
-    const sub = isRicochet ? '30 мс lookahead' : 'переход накрывает атаку';
+    const sub = isRicochet ? 'переход заранее' : 'переход накрывает атаку';
     const accent = isRicochet ? colors.good : colors.bad;
 
     drawText(name, PADDING, baseY - 52, 14, colors.text, 600);
@@ -253,7 +253,7 @@ if (canvas) {
 
     ctx.beginPath();
     if (isRicochet) {
-      // Step at lookahead point (30 ms before transient)
+      // Step at the pre-transient point
       const stepX = TRANSIENT_X - 48;
       ctx.moveTo(PADDING, baseY + 20);
       ctx.lineTo(stepX, baseY + 20);
