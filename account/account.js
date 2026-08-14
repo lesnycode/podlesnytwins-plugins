@@ -210,14 +210,19 @@ function purchaseCard(p, limit) {
   lic.textContent = 'Скачать файл лицензии';
   actions.append(lic);
 
-  if (p.download) {
+  const downloads = Array.isArray(p.downloads) && p.downloads.length
+    ? p.downloads
+    : (p.download ? [{ label: '', url: p.download }] : []);
+  downloads.forEach((download) => {
     const dl = document.createElement('a');
     dl.className = 'btn btn-secondary btn-small';
-    dl.href = p.download;
+    dl.href = download.url;
     dl.rel = 'noopener';
-    dl.textContent = 'Скачать установщик';
+    dl.textContent = download.label
+      ? `Скачать для ${download.label}`
+      : 'Скачать установщик';
     actions.append(dl);
-  }
+  });
 
   const devHead = document.createElement('p');
   devHead.className = 'devices-head';
