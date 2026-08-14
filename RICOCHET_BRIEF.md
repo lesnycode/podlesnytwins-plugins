@@ -20,7 +20,7 @@
 
 ### Tech
 - VST3 / AU / Standalone.
-- macOS / Windows.
+- macOS.
 - 8 UI themes.
 - Version 1.0.1.
 
