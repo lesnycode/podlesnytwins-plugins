@@ -59,9 +59,9 @@ if (dialog && form) {
         method: 'POST', headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ product: productInput.value, email, name })
       });
-      if (!response.ok) throw new Error(response.status === 503 ? 'Оплата временно недоступна. Напишите нам на ceo@podlesnytwins.com.' : 'Не удалось создать платёж. Попробуйте ещё раз.');
+      if (!response.ok) throw new Error(response.status === 503 ? 'Оплата временно недоступна. Напишите нам на plugins@podlesnytwins.com.' : 'Не удалось создать платёж. Попробуйте ещё раз.');
       const data = await response.json();
-      if (!data.url) throw new Error('Сервис оплаты не вернул ссылку. Напишите нам на ceo@podlesnytwins.com.');
+      if (!data.url) throw new Error('Сервис оплаты не вернул ссылку. Напишите нам на plugins@podlesnytwins.com.');
       window.location.href = data.url;
     } catch (error) {
       showError(error instanceof TypeError ? 'Не удалось связаться с сервисом оплаты. Проверьте соединение.' : error.message);

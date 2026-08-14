@@ -115,14 +115,14 @@ if (dialog && form) {
       });
 
       if (res.status === 503) {
-        throw new Error('Приём оплаты ещё настраивается. Напишите на ceo@podlesnytwins.com — вышлем счёт вручную.');
+        throw new Error('Приём оплаты ещё настраивается. Напишите на plugins@podlesnytwins.com — вышлем счёт вручную.');
       }
       if (!res.ok) {
-        throw new Error('Банк не принял заявку на оплату. Попробуйте ещё раз или напишите на ceo@podlesnytwins.com.');
+        throw new Error('Банк не принял заявку на оплату. Попробуйте ещё раз или напишите на plugins@podlesnytwins.com.');
       }
 
       const data = await res.json();
-      if (!data.url) throw new Error('Сервис оплаты не вернул ссылку. Напишите на ceo@podlesnytwins.com.');
+      if (!data.url) throw new Error('Сервис оплаты не вернул ссылку. Напишите на plugins@podlesnytwins.com.');
 
       window.location.href = data.url;
       return;
