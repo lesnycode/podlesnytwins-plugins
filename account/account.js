@@ -166,13 +166,23 @@ function deviceRow(purchase, device, limit) {
   });
 
   const info = document.createElement('div');
-  info.innerHTML = `<b>Устройство ${device.id}</b><span>последний раз: ${seen}</span>`;
+  const label = device.name || `Устройство ${device.id}`;
+  const title = document.createElement('b');
+  title.textContent = label;
+  const meta = document.createElement('span');
+  meta.textContent = `${device.id} · последний раз: ${seen}`;
+  info.append(title, meta);
 
   const btn = document.createElement('button');
   btn.className = 'btn btn-secondary btn-small';
   btn.type = 'button';
   btn.textContent = 'Отвязать';
   btn.addEventListener('click', async () => {
+    const confirmed = window.confirm(
+      `Отвязать «${label}»?\n\n` +
+      'Освободится одно место активации. Покупка и файл лицензии останутся действующими.'
+    );
+    if (!confirmed) return;
     btn.disabled = true;
     btn.textContent = 'Отвязываем…';
     const res = await api('/api/account/device/release', {
