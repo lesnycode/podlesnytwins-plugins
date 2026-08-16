@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Faraway и Ricochet — плагины Podlesny Twins</title>
-  <meta name="description" content="Faraway управляет глубиной, Ricochet — движением в стерео. Два авторских аудиоплагина Podlesny Twins.">
+  <meta name="description" content="Faraway строит планы по глубине, Ricochet — движение перкуссии в стерео. Два авторских аудиоплагина Podlesny Twins.">
   <link rel="canonical" href="https://plugins.podlesnytwins.com/">
   <link rel="icon" href="/ricochet/assets/favicon.svg" type="image/svg+xml">
   <link rel="stylesheet" href="/ricochet/styles.css">
@@ -22,25 +22,40 @@
   <header class="site-header"><div class="container header-inner">
     <a href="/" class="logo">Podlesny&nbsp;Twins</a>
     <nav class="nav" aria-label="Основная навигация"><a href="/faraway/">Faraway</a><a href="/ricochet/">Ricochet</a><a href="#combo">Комбо</a><a href="/account/">Лицензии</a></nav>
-    <button class="btn btn-primary btn-small header-buy" data-checkout="combo">Оба плагина за 4 ₽</button>
   </div></header>
 
   <main>
-    <section class="home-hero"><div class="container">
-      <p class="hero-meta">Faraway + Ricochet · VST3 / AU / Standalone</p>
-      <h1>Два плагина для позиционирования звука в миксе.</h1>
-      <p class="home-lead">Faraway отодвигает источник в глубину. Ricochet переносит каждый новый удар в другую точку стерео.</p>
-      <div class="hero-actions"><a class="btn btn-primary btn-large" href="#plugins">Выбрать плагин</a><button class="btn btn-secondary btn-large" data-checkout="combo">Взять оба за 4 ₽</button></div>
+    <section class="home-hero">
+      <canvas class="hero-shader" data-hero-shader aria-hidden="true"></canvas>
+      <div class="container hero-grid">
+      <div class="hero-copy">
+        <h1>Практические инструменты для трёхмерных миксов</h1>
+        <div class="hero-actions"><a class="btn btn-primary btn-large" href="#plugins">14 дней бесплатно</a><a class="btn btn-secondary btn-large" href="#plugins">Как это работает</a></div>
+      </div>
+      <div class="hero-cards">
+        <a class="hero-card hero-card--faraway" href="/faraway/">
+          <span class="hero-card-role">Глубина</span>
+          <span class="hero-card-name">Faraway</span>
+          <p class="hero-card-promise">Отодвигает источник одной ручкой DISTANCE: компрессия, эквалайзер, ранние отражения и AIR идут вместе.</p>
+          <span class="hero-card-more">Открыть · 3 ₽</span>
+        </a>
+        <a class="hero-card hero-card--ricochet" href="/ricochet/">
+          <span class="hero-card-role">Панорама</span>
+          <span class="hero-card-name">Ricochet</span>
+          <p class="hero-card-promise">Переносит каждый удар в новую точку стерео. Переход стартует от транзиента и заканчивается до атаки.</p>
+          <span class="hero-card-more">Открыть · 2 ₽</span>
+        </a>
+      </div>
     </div></section>
 
     <section class="product-showcase" id="plugins">
       <article class="product-panel product-panel--faraway"><div class="container product-panel-grid">
-        <div class="product-panel-copy"><p class="eyebrow eyebrow--amber">Глубина</p><h2>Faraway</h2><p class="product-promise">Отодвинуть источник одной ручкой.</p><p>DISTANCE одновременно меняет компрессию, эквалайзер, ранние отражения и AIR.</p><div class="hero-actions"><a class="btn btn-amber btn-large" href="/faraway/">О Faraway</a><button class="btn btn-secondary btn-large" data-checkout="faraway">Купить за 3 ₽</button></div></div>
+        <div class="product-panel-copy"><p class="eyebrow eyebrow--amber">Глубина</p><h2>Faraway</h2><p class="product-promise">Отодвинуть источник одной ручкой.</p><p>DISTANCE одновременно меняет компрессию, эквалайзер, ранние отражения и AIR.</p><div class="hero-actions"><a class="btn btn-amber btn-large" href="https://api.podlesnytwins.com/files/Faraway-Installer-v1.0.86.pkg">14 дней бесплатно</a><button class="btn btn-secondary btn-large" data-checkout="faraway">Купить за 3 ₽</button><a class="btn btn-secondary btn-large" href="/faraway/">О Faraway</a></div><p class="hero-fine">Все функции 14 дней, без регистрации и карты. macOS.</p></div>
         <figure class="showcase-shot showcase-shot--wide"><img src="/faraway/assets/faraway-ui.png" alt="Интерфейс Faraway с секциями Compressor, Distance и Equalizer" width="3120" height="1172"></figure>
       </div></article>
       <article class="product-panel product-panel--ricochet"><div class="container product-panel-grid product-panel-grid--reverse">
         <figure class="showcase-shot"><img src="/ricochet/assets/ricochet-ui.png?v=169" alt="Интерфейс Ricochet с дисплеями Movement и Detection" width="1040" height="560"></figure>
-        <div class="product-panel-copy"><p class="eyebrow">Движение</p><h2>Ricochet</h2><p class="product-promise">Панорамный переход заканчивается до атаки.</p><p>Ricochet следует за транзиентами, а не за сеткой. Ритм задаёт сам материал, без MIDI.</p><div class="hero-actions"><a class="btn btn-primary btn-large" href="/ricochet/">О Ricochet</a><button class="btn btn-secondary btn-large" data-checkout="ricochet">Купить за 2 ₽</button></div></div>
+        <div class="product-panel-copy"><p class="eyebrow">Движение</p><h2>Ricochet</h2><p class="product-promise">Панорамный переход заканчивается до атаки.</p><p>Ricochet следует за транзиентами, а не за сеткой. Ритм задаёт сам материал, без MIDI.</p><div class="hero-actions"><a class="btn btn-primary btn-large" href="https://api.podlesnytwins.com/files/Ricochet-Installer-v1.6.10.pkg">14 дней бесплатно</a><button class="btn btn-secondary btn-large" data-checkout="ricochet">Купить за 2 ₽</button><a class="btn btn-secondary btn-large" href="/ricochet/">О Ricochet</a></div><p class="hero-fine">Все функции 14 дней, без регистрации и карты. macOS.</p></div>
       </div></article>
     </section>
 
@@ -61,5 +76,6 @@
 
   <dialog id="checkout" class="checkout" aria-labelledby="checkout-title"><button class="checkout-close" type="button" data-checkout-close aria-label="Закрыть">&times;</button><h2 id="checkout-title">Faraway + Ricochet — 4 ₽</h2><p class="checkout-lead">Лицензии и ссылки на установщики придут после оплаты.</p><form id="checkout-form" novalidate><input type="hidden" name="product" value="combo"><label class="field"><span class="field-label">Имя и фамилия</span><input type="text" name="name" autocomplete="name" required maxlength="100" placeholder="Иван Петров"><span class="field-hint">Имя будет указано в лицензии.</span></label><label class="field"><span class="field-label">E-mail</span><input type="email" name="email" autocomplete="email" required inputmode="email" placeholder="you@studio.com"></label><label class="check"><input type="checkbox" name="consent" required><span>Принимаю <a href="/legal/offer/" target="_blank" rel="noopener">публичную оферту</a>.</span></label><p class="checkout-fine">Имя и e-mail нужны для оформления заказа и выдачи лицензии. Подробнее — в <a href="/legal/privacy/" target="_blank" rel="noopener">политике обработки данных</a>.</p><p class="checkout-error" role="alert" hidden></p><button class="btn btn-primary btn-large checkout-submit" type="submit">Перейти к оплате</button><p class="checkout-fine">Оплата картой или через СБП на стороне Точка Банка.</p></form></dialog>
   <script src="/script.js"></script>
+  <script src="/hero-shader.js" defer></script>
 </body>
 </html>
