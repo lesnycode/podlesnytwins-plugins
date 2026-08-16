@@ -282,10 +282,6 @@ p:last-child {
     grid-template-columns: minmax(0, 1fr) minmax(0, 1.05fr);
     gap: 64px;
   }
-  /* the plugin is the hero: let the shot run past the container edge */
-  .hero-shot {
-    margin-right: calc((100vw - var(--max-width)) / -2 - 24px);
-  }
 }
 
 .hero-copy h1 {
@@ -423,6 +419,16 @@ p:last-child {
   border: 1px solid var(--border);
   background: var(--surface);
   box-shadow: 0 48px 120px rgba(0, 0, 0, 0.6), 0 0 90px -40px var(--accent-glow);
+}
+
+/* Плагин и есть герой: скриншот выходит за край контейнера в поле до края
+   экрана. Объявление стоит ЗДЕСЬ, после `margin: 0` выше, а не в медиаблоке
+   в начале файла, где оно пролежало мёртвым: медиазапрос не добавляет
+   специфичности, поэтому более позднее `margin: 0` его перебивало и выноса
+   не было ни на одной странице. У Faraway он был только потому, что
+   дублировался отдельным правилом в /styles.css — лист грузится вторым. */
+@media (min-width: 1000px) {
+  .hero-shot { margin-right: calc((100vw - var(--max-width)) / -2 - 24px); }
 }
 
 /* Split layout */
