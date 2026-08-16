@@ -70,6 +70,34 @@ if (dialog && form) {
   });
 }
 
+/* Меню демо раскрывается силами <details>. Здесь только то, чего разметка не
+   умеет: Esc, клик мимо и одно открытое меню на странице. Без этого блока
+   меню всё равно работает. */
+const demos = document.querySelectorAll('details.demo');
+if (demos.length) {
+  demos.forEach((demo) => {
+    demo.addEventListener('toggle', () => {
+      if (!demo.open) return;
+      demos.forEach((other) => { if (other !== demo) other.open = false; });
+    });
+  });
+
+  document.addEventListener('click', (event) => {
+    demos.forEach((demo) => { if (demo.open && !demo.contains(event.target)) demo.open = false; });
+  });
+
+  document.addEventListener('keydown', (event) => {
+    if (event.key !== 'Escape') return;
+    // диалог оплаты закрывается по Esc сам — не отбираем у него нажатие
+    if (document.querySelector('dialog[open]')) return;
+    demos.forEach((demo) => {
+      if (!demo.open) return;
+      demo.open = false;
+      if (demo.contains(document.activeElement)) demo.querySelector('summary').focus();
+    });
+  });
+}
+
 const buybar = document.querySelector('.buybar');
 const heroActions = document.querySelector('.hero-actions');
 const pricing = document.getElementById('pricing');

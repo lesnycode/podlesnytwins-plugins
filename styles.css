@@ -134,6 +134,11 @@
 .combo-price span { font-family: var(--font-display); font-size: clamp(4rem,8vw,7rem); }
 @media (min-width: 860px) { .combo-grid { grid-template-columns: 1.3fr .7fr; gap: 88px; } }
 
+/* На главной --accent остаётся зелёным: янтарь тут у одной панели, а не у
+   страницы. Переопределяем токен только внутри меню демо, чтобы фокус и
+   ховер шли в цвет панели и ничего не красилось хардкодом. */
+.product-panel--faraway .demo { --accent: var(--amber); }
+
 .faraway-page { --accent: var(--amber); --accent-dim: var(--amber-dim); --accent-glow: var(--amber-glow); }
 .faraway-hero-grid { grid-template-columns: 1fr; }
 .faraway-shot img { width: 100%; max-width: 100%; transform: none; }

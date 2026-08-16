@@ -312,9 +312,104 @@ p:last-child {
   margin-bottom: 20px;
 }
 
-/* Две платформы — один выбор, поэтому и один элемент потока: внутри
-   .hero-actions пара переносится целиком, а не разрывается по строкам. */
-.btn-pair { display: flex; gap: 14px; flex-wrap: nowrap; }
+/* Демо: одна кнопка, платформа выбирается в раскрывающемся списке.
+   Держится на <details>, поэтому клавиатура, screen reader и Enter/Space
+   работают без JS; скрипт только закрывает меню по Esc и по клику мимо. */
+.demo {
+  position: relative;
+  display: inline-flex;
+}
+
+.demo > summary {
+  gap: 10px;
+  list-style: none;
+}
+
+.demo > summary::-webkit-details-marker {
+  display: none;
+}
+
+.demo > summary:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 3px;
+}
+
+.demo-caret {
+  flex: none;
+  transition: transform 0.2s var(--ease-out);
+}
+
+.demo[open] > summary .demo-caret {
+  transform: rotate(180deg);
+}
+
+/* абсолютное позиционирование: раскрытие не меняет высоту .hero-actions */
+.demo-menu {
+  position: absolute;
+  top: calc(100% + 8px);
+  left: 0;
+  z-index: 20;
+  display: grid;
+  width: max-content;
+  min-width: 100%;
+  max-width: min(340px, calc(100vw - 48px));
+  padding: 6px;
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  background: var(--surface-2);
+  box-shadow: 0 24px 60px rgba(0, 0, 0, 0.5);
+}
+
+.demo-option {
+  display: grid;
+  gap: 2px;
+  align-content: center;
+  min-height: 44px;
+  padding: 10px 14px;
+  border-radius: 7px;
+  color: var(--text);
+  transition: background 0.2s var(--ease-out);
+}
+
+.demo-option:hover {
+  background: var(--surface);
+}
+
+.demo-option:hover .demo-option-name {
+  color: var(--accent);
+}
+
+.demo-option:focus-visible {
+  background: var(--surface);
+  outline: 2px solid var(--accent);
+  outline-offset: -2px;
+  border-radius: 7px;
+}
+
+.demo-option-name {
+  font-weight: 600;
+  font-size: 0.9375rem;
+  line-height: 1.3;
+}
+
+.demo-option-note {
+  font-size: 0.75rem;
+  line-height: 1.35;
+  color: var(--muted);
+}
+
+@keyframes demo-open {
+  from { opacity: 0; transform: translateY(-4px); }
+}
+
+.demo[open] .demo-menu {
+  animation: demo-open 0.16s var(--ease-out);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .demo[open] .demo-menu { animation: none; }
+  .demo-caret { transition: none; }
+}
 
 .hero-fine {
   font-size: 0.875rem;
