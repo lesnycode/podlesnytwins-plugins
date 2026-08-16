@@ -119,6 +119,12 @@
 @media (min-width: 980px) {
   .product-panel-grid { grid-template-columns: minmax(300px,.72fr) minmax(0,1.28fr); }
   .product-panel-grid--reverse { grid-template-columns: minmax(0,1.28fr) minmax(300px,.72fr); }
+  /* Faraway's window is 2.66:1 against Ricochet's 1.86:1, so in an equal side
+     column it renders 264px tall against 378 and reads as the smaller product.
+     Matching heights side by side would need a 1006px figure and leave 94px for
+     the copy. Give this one panel the full width instead: the copy sits above
+     and the instrument gets the whole container. */
+  .product-panel--faraway .product-panel-grid { grid-template-columns: 1fr; gap: 40px; }
 }
 
 .combo { background: var(--surface); }
