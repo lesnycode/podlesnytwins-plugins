@@ -111,20 +111,24 @@ a {
   white-space: nowrap;
 }
 
+/* меню как на podlesnytwins.com: SaarSP 17px, обычное начертание */
 .nav {
   display: none;
-  gap: 32px;
-  font-size: 0.9rem;
+  gap: 28px;
+  font-family: var(--font-display);
+  font-size: 1.0625rem;
+  letter-spacing: 0.02em;
   margin-left: auto;
 }
 
 .nav a {
-  color: var(--muted);
+  color: var(--text);
   transition: color 0.2s ease;
 }
 
+/* белые как на podlesnytwins.com, поэтому ховер уводим в акцент страницы */
 .nav a:hover {
-  color: var(--text);
+  color: var(--accent);
 }
 
 /* scoped so the later .btn { display: inline-flex } cannot win on specificity */
