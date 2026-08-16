@@ -140,12 +140,13 @@
 .product-panel--faraway .demo { --accent: var(--amber); }
 
 .faraway-page { --accent: var(--amber); --accent-dim: var(--amber-dim); --accent-glow: var(--amber-glow); }
-.faraway-hero-grid { grid-template-columns: 1fr; }
 .faraway-shot img { width: 100%; max-width: 100%; transform: none; }
-@media (min-width: 1000px) {
-  .faraway-hero-grid { grid-template-columns: minmax(320px,.72fr) minmax(0,1.28fr); }
-  .faraway-shot { margin-right: calc((100vw - var(--max-width)) / -2 - 24px); }
-}
+/* Герой Faraway жил на своей сетке — 0.72/1.28 против 1/1.05 у Ricochet, —
+   и колонка текста выходила 392 px против 562. Две страницы одного продукта
+   читались как сделанные разными руками. Сетку и вынос картинки за край
+   задаёт .hero-grid / .hero-shot в общем листе, здесь переопределять нечего:
+   картинки всё равно разной высоты, потому что окна плагинов разной формы,
+   и это честная разница, а не разная вёрстка. */
 
 .depth-map { display: grid; grid-template-columns: repeat(2, 1fr); gap: 8px; }
 .depth-map span { min-height: 96px; display: grid; place-items: center; border: 1px solid var(--border); color: var(--muted); font-size: .78rem; font-weight: 700; letter-spacing: .08em; }
