@@ -312,6 +312,10 @@ p:last-child {
   margin-bottom: 20px;
 }
 
+/* Две платформы — один выбор, поэтому и один элемент потока: внутри
+   .hero-actions пара переносится целиком, а не разрывается по строкам. */
+.btn-pair { display: flex; gap: 14px; flex-wrap: nowrap; }
+
 .hero-fine {
   font-size: 0.875rem;
   margin-bottom: 0;
