@@ -119,6 +119,16 @@
 @media (min-width: 980px) {
   .product-panel-grid { grid-template-columns: minmax(300px,.72fr) minmax(0,1.28fr); }
   .product-panel-grid--reverse { grid-template-columns: minmax(0,1.28fr) minmax(300px,.72fr); }
+
+  /* Окно Faraway 2.66:1 против 1.86:1 у Ricochet, поэтому в равной колонке оно
+     даёт 264 px высоты против 378 и читается как меньший продукт. Внутри
+     контейнера +20% не выдать: картинке нужно 845 px, тексту осталось бы 255
+     при его собственном минимуме 300. Растём вправо, в поле между контейнером
+     и краем экрана, и ограничиваем рост ровно тем, что там есть — ширина
+     никогда не больше доступного места, поэтому обрезать нечего. */
+  .product-panel--faraway .showcase-shot {
+    width: min(120%, calc(100% + (100vw - var(--max-width)) / 2 + 16px));
+  }
 }
 
 .combo { background: var(--surface); }
