@@ -112,7 +112,10 @@
 .product-panel-copy h2 { margin-bottom: 12px; font-size: clamp(3rem, 6vw, 5.4rem); }
 .product-promise { color: var(--text); font-size: clamp(1.2rem, 2vw, 1.55rem); max-width: 34ch; }
 .showcase-shot { margin: 0; border: 1px solid var(--border); border-radius: 14px; overflow: hidden; box-shadow: 0 34px 90px rgba(0,0,0,.48); }
-.showcase-shot--wide img { width: 150%; max-width: none; transform: translateX(-17%); }
+/* Faraway's window is 3120x1172. Zooming it to 150% and panning left put a
+   third of the plugin outside the figure's overflow:hidden — the EQ curve and
+   the right-hand modules were simply gone. Show the instrument whole. */
+.showcase-shot--wide img { width: 100%; max-width: 100%; transform: none; }
 @media (min-width: 980px) {
   .product-panel-grid { grid-template-columns: minmax(300px,.72fr) minmax(0,1.28fr); }
   .product-panel-grid--reverse { grid-template-columns: minmax(0,1.28fr) minmax(300px,.72fr); }
@@ -127,7 +130,7 @@
 
 .faraway-page { --accent: var(--amber); --accent-dim: var(--amber-dim); --accent-glow: var(--amber-glow); }
 .faraway-hero-grid { grid-template-columns: 1fr; }
-.faraway-shot img { width: 148%; max-width: none; transform: translateX(-16%); }
+.faraway-shot img { width: 100%; max-width: 100%; transform: none; }
 @media (min-width: 1000px) {
   .faraway-hero-grid { grid-template-columns: minmax(320px,.72fr) minmax(0,1.28fr); }
   .faraway-shot { margin-right: calc((100vw - var(--max-width)) / -2 - 24px); }
@@ -143,5 +146,7 @@
 @media (max-width: 680px) {
   .home-hero { min-height: auto; padding-top: 124px; }
   .product-panel { padding: 76px 0; }
-  .showcase-shot--wide img, .faraway-shot img { width: 175%; transform: translateX(-22%); }
+  /* was 175% + pan: on a phone that showed roughly the middle third of the
+     plugin and read as a broken image rather than a close-up */
+  .showcase-shot--wide img, .faraway-shot img { width: 100%; transform: none; }
 }
