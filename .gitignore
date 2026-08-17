@@ -1,1 +1,10 @@
 devserver.py
+
+# Репозиторий обслуживает GitHub Pages: всё, что попадает в коммит, доступно
+# по прямой ссылке на plugins.podlesnytwins.com. Внутренние документы и выхлоп
+# инструментов сюда класть нельзя.
+.impeccable/
+Skills-Results/
+MOBILE.md
+RELEASE_DECISIONS.md
+legal/RKN_NOTIFICATION_DRAFT.md

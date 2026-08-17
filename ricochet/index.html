@@ -2,7 +2,7 @@
 <html lang="ru">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
   <title>Ricochet — transient-triggered autopan от Podlesny Twins</title>
   <meta name="description" content="Ricochet следует за транзиентами и завершает панорамный переход до атаки.">
   <link rel="canonical" href="https://plugins.podlesnytwins.com/ricochet/">
@@ -50,7 +50,7 @@
         <div class="hero-copy">
           <p class="hero-meta">macOS: VST3 / AU / Standalone · Windows: VST3</p>
           <h1>Панорамный переход заканчивается до атаки.</h1>
-          <p class="hero-sub">Ricochet следует за транзиентами, а не за сеткой. Переход начинается заранее.</p>
+          <p class="hero-sub">Детектор ловит удар и запускает переход раньше него. Ритм задаёт сам материал, без MIDI и без сетки.</p>
           <div class="hero-actions">
             <button class="btn btn-primary btn-large" data-checkout="ricochet">Купить за 2 ₽</button>
             <details class="demo">
@@ -61,10 +61,10 @@
               </div>
             </details>
           </div>
-          <p class="hero-fine">Демо: все функции 14 дней, без регистрации и карты. Покупка без подписки. Одна лицензия работает и на macOS (Intel и Apple Silicon), и на Windows — на двух своих устройствах, в любом сочетании систем.</p>
+          <p class="hero-fine">14 дней все функции, без регистрации и карты. Покупка — один платёж, без подписки.</p>
         </div>
         <figure class="hero-shot">
-          <img src="assets/ricochet-ui.png?v=169" alt="Интерфейс Ricochet с дисплеями Movement и Detection" width="1040" height="560" loading="eager" fetchpriority="high">
+          <picture><source type="image/webp" srcset="/ricochet/assets/ricochet-ui-800.webp 800w, /ricochet/assets/ricochet-ui.webp 1040w" sizes="(max-width: 859px) 100vw, 640px"><img src="assets/ricochet-ui.png?v=169" alt="Интерфейс Ricochet с дисплеями Movement и Detection" width="1040" height="560" loading="eager" fetchpriority="high"></picture>
         </figure>
       </div>
     </section>
@@ -89,17 +89,17 @@
           <li class="step">
             <span class="step-num">1</span>
             <h3>Детекция</h3>
-            <p>Ricochet слушает side-chain-сигнал и фиксирует каждый транзиент по порогу. Нет MIDI, нет темпосинхронизации, нет редактора паттернов.</p>
+            <p>Детектор отмечает каждый удар на side-chain по порогу. FILTER отсекает то, что за удар считать не надо.</p>
           </li>
           <li class="step">
             <span class="step-num">2</span>
             <h3>Опережение</h3>
-            <p>После срабатывания детектора панорамное перемещение стартует заранее.</p>
+            <p>Переход стартует сразу по детекту, раньше самой атаки.</p>
           </li>
           <li class="step">
             <span class="step-num">3</span>
             <h3>Перемещение</h3>
-            <p>По приходу атаки сигнал уже оказывается на противоположной стороне. Весь удар остаётся в одном панорамном положении.</p>
+            <p>К атаке сигнал уже на другой стороне. Весь удар звучит из одной точки, а не размазывается по ней.</p>
           </li>
         </ol>
         <p class="section-note">Одинаковый вход + одинаковый START SIDE = одинаковый выход. Результат детерминирован.</p>
@@ -112,19 +112,19 @@
         <dl class="cases">
           <div class="case">
             <dt>Хай-хэты и перкуссия</dt>
-            <dd>Смещаются влево-вправо по каждому удару, не скапливаясь в центре и не раздувая стереобазу искусственно.</dd>
+            <dd>Каждый удар садится в свою точку. Рисунок расходится по стерео сам, без widening.</dd>
           </div>
           <div class="case">
-            <dt>Эд-libs</dt>
-            <dd>Вокальные вставки перепрыгивают между каналами в ритм исполнения, а не по заранее заданной сетке.</dd>
+            <dt>Эд-либы</dt>
+            <dd>Вставки перепрыгивают между каналами в ритм подачи, а не по заранее заданной сетке.</dd>
           </div>
           <div class="case">
-            <dt>Снейры и ударные элементы</dt>
-            <dd>Стерео-движение перкуссии без фейзерных артефактов и widening-эффектов.</dd>
+            <dt>Снейры и слои ударных</dt>
+            <dd>Движение чистым паном: ни задержки между каналами, ни фазовых артефактов.</dd>
           </div>
           <div class="case">
-            <dt>Всё, что играет человек</dt>
-            <dd>Pan следует за музыкантом, а не за часами секвенсора.</dd>
+            <dt>Живые дубли</dt>
+            <dd>Панорама повторяет тайминг исполнения вместе с оттяжками и свингом.</dd>
           </div>
         </dl>
       </div>
@@ -135,7 +135,7 @@
         <h2>Чем управлять.</h2>
         <div class="control-grid">
           <figure class="control-shot">
-            <img src="assets/ricochet-ui.png?v=169" alt="Крупный план секций Trigger и Motion плагина Ricochet." width="1040" height="560" loading="lazy">
+            <picture><source type="image/webp" srcset="/ricochet/assets/ricochet-ui-800.webp 800w, /ricochet/assets/ricochet-ui.webp 1040w" sizes="(max-width: 859px) 100vw, 640px"><img src="assets/ricochet-ui.png?v=169" alt="Крупный план секций Trigger и Motion плагина Ricochet." width="1040" height="560" loading="lazy"></picture>
           </figure>
           <div class="control-list">
             <div class="control-group">
@@ -198,7 +198,7 @@
           <li class="swatch" style="--sw-bg:#120c07;--sw-panel:#1c1209;--sw-accent:#ec7f30"><span class="swatch-chip"></span>Tube Glow</li>
         </ul>
         <figure class="theme-shot">
-          <img src="assets/ricochet-ui.png?v=169" alt="Интерфейс Ricochet в теме Deep Teal." width="1040" height="560" loading="lazy">
+          <picture><source type="image/webp" srcset="/ricochet/assets/ricochet-ui-800.webp 800w, /ricochet/assets/ricochet-ui.webp 1040w" sizes="(max-width: 859px) 100vw, 640px"><img src="assets/ricochet-ui.png?v=169" alt="Интерфейс Ricochet в теме Deep Teal." width="1040" height="560" loading="lazy"></picture>
           <figcaption>Deep Teal, тема по умолчанию</figcaption>
         </figure>
       </div>
@@ -208,7 +208,7 @@
       <div class="container pricing-inner">
         <div class="price-head">
           <h2>Цена.</h2>
-          <p>Один платёж. Можно использовать на двух своих устройствах. Обновления текущей версии включены.</p>
+          <p>Один платёж, без подписки. Лицензия на две своих машины: macOS и Windows в любом сочетании. Обновления текущей версии включены.</p>
         </div>
         <div class="price-card reveal">
           <p class="price"><span class="price-current">2</span><span class="price-cur">₽</span></p>
@@ -327,6 +327,7 @@
   </dialog>
 
   <script src="/script.js"></script>
+  <script src="autopan.js"></script>
   <script type="application/ld+json">
   {
     "@context": "https://schema.org",

@@ -12,22 +12,19 @@
 .btn-amber:hover { background: var(--amber-bright); box-shadow: 0 0 36px var(--amber-glow); }
 .btn-amber:disabled { background: var(--amber-dim); cursor: progress; }
 
-.eyebrow {
-  margin: 0 0 16px;
-  color: var(--accent);
-  font-size: .75rem;
-  font-weight: 700;
-  letter-spacing: .14em;
-  text-transform: uppercase;
-}
-.eyebrow--amber { color: var(--amber); }
-.eyebrow--split { color: var(--text); }
-.eyebrow--split::before {
+/* Надзаголовки (.eyebrow) убраны со всех страниц: они были прямо перечислены
+   в анти-референсах PRODUCT.md, а на деле стояли над каждой второй секцией и
+   отбирали у заголовка первую строку. «Одна макрокоманда» / «Зачем» / «Комбо»
+   не несли ничего, чего нет в самом заголовке.
+   Двухцветная черта из .eyebrow--split была единственной живой деталью в той
+   строке, поэтому она переехала на сам заголовок комбо-блока. */
+.combo-band h2::before,
+.combo h2::before {
   content: "";
-  display: inline-block;
-  width: 42px;
-  height: 2px;
-  margin: 0 12px 3px 0;
+  display: block;
+  width: 56px;
+  height: 3px;
+  margin-bottom: 22px;
   background: linear-gradient(90deg, var(--amber) 0 50%, var(--accent) 50%);
 }
 
@@ -53,7 +50,6 @@
   gap: 6px;
   padding: 24px 26px 22px;
   border: 1px solid var(--border);
-  border-left-width: 3px;
   border-radius: 12px;
   /* карточки лежат поверх шейдера, поэтому фон почти непрозрачный: иначе кольца съедают текст */
   background: rgba(15, 18, 20, .92);
@@ -68,12 +64,16 @@
 .hero-card-name { font-family: var(--font-display); font-size: clamp(1.9rem, 3vw, 2.5rem); line-height: 1; color: var(--text); }
 .hero-card-promise { margin: 4px 0 0; font-size: .92rem; line-height: 1.5; }
 .hero-card-more { margin-top: 6px; font-size: .78rem; font-weight: 700; letter-spacing: .08em; text-transform: uppercase; color: var(--text); }
-.hero-card--faraway { border-left-color: var(--amber); }
+/* Цвет продукта раньше держался на 3-пиксельной планке слева — самом узнаваемом
+   штампе сгенерированных интерфейсов. Он и так звучит дважды: в подписи роли и
+   в строке «Открыть». Достаточно подкрасить саму рамку в 1 px и дать ей выйти
+   в полный тон на ховере. */
+.hero-card--faraway { border-color: rgba(240, 138, 53, .3); }
 .hero-card--faraway .hero-card-role, .hero-card--faraway .hero-card-more { color: var(--amber); }
-.hero-card--faraway:hover { border-color: var(--amber-dim); border-left-color: var(--amber); }
-.hero-card--ricochet { border-left-color: var(--accent); }
+.hero-card--faraway:hover { border-color: var(--amber); }
+.hero-card--ricochet { border-color: rgba(94, 231, 179, .26); }
 .hero-card--ricochet .hero-card-role, .hero-card--ricochet .hero-card-more { color: var(--accent); }
-.hero-card--ricochet:hover { border-color: var(--accent-dim); border-left-color: var(--accent); }
+.hero-card--ricochet:hover { border-color: var(--accent); }
 
 /* Шейдер живёт слоем самой секции, а не карточкой: маска растворяет его в фоне. */
 .hero-shader {
@@ -95,13 +95,20 @@
   .home-lead { max-width: 34ch; }
 }
 @media (max-width: 979px) {
-  /* на узких экранах текст ложится поверх шейдера — уводим его вниз и гасим */
-  /* в одну колонку текст ложится прямо на кольца, поэтому уводим их под CTA и гасим */
+  /* Кольца на узком раньше гасились до .32 — и это был худший из вариантов:
+     WebGL всё равно считался каждый кадр (в hero-shader.js нет отключения по
+     ширине, только по prefers-reduced-motion), то есть батарея тратилась, а
+     фона не было. Возвращаем ту же насыщенность, что на десктопе.
+
+     Читаемость держит не гашение, а маска: верхняя часть экрана, где лежат
+     заголовок и подзаголовок, остаётся чистой, кольца набирают полную силу
+     ниже — там, где карточки продуктов, а у них собственный почти
+     непрозрачный фон с блюром. Текст поверх колец не оказывается нигде. */
   .hero-shader {
     width: 100%;
-    opacity: .32;
-    -webkit-mask-image: linear-gradient(180deg, transparent 58%, #000 88%);
-    mask-image: linear-gradient(180deg, transparent 58%, #000 88%);
+    opacity: .72;
+    -webkit-mask-image: linear-gradient(180deg, transparent 30%, #000 62%);
+    mask-image: linear-gradient(180deg, transparent 30%, #000 62%);
   }
 }
 
@@ -168,9 +175,18 @@
 .combo-band { background: linear-gradient(110deg, rgba(240,138,53,.055), rgba(94,231,179,.045)); }
 
 @media (max-width: 680px) {
-  .home-hero { min-height: auto; padding-top: 124px; }
+  /* min-height нужен не ради воздуха, а ради фона: при auto секция
+     схлопывается по контенту, и кольцам просто негде развернуться —
+     от шейдера остаётся полоска. */
+  .home-hero { min-height: 84svh; padding-top: 124px; }
   .product-panel { padding: 76px 0; }
   /* was 175% + pan: on a phone that showed roughly the middle third of the
      plugin and read as a broken image rather than a close-up */
   .showcase-shot--wide img, .faraway-shot img { width: 100%; transform: none; }
+
+  /* Та же болезнь у кропа секции контролов: 242% ширины на 390 px показывали
+     середину прибора без краёв — читалось как битая картинка, а не крупный
+     план. На телефоне лучше весь прибор мелким, чем треть крупно. */
+  .faraway-control-shot { aspect-ratio: 2.66 / 1; }
+  .faraway-control-shot img { width: 100%; height: auto; object-fit: contain; }
 }

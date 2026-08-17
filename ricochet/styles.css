@@ -14,6 +14,46 @@
   font-display: swap;
 }
 
+/* Golos Text — Paratype, Александра Королькова и Виталий Кузьмин, SIL OFL 1.1.
+   Копия лицензии лежит рядом со шрифтом.
+
+   Зачем он тут. В --font-body был прописан Work Sans, но он НЕ грузился ни
+   одним @font-face и кириллицы в нём нет вообще. То есть весь мелкий русский
+   текст сайта рисовался системным шрифтом посетителя: SF Pro на маке, Segoe UI
+   на винде. Два разных сайта, ни один не выбран.
+   Golos сделан Паратайпом под экранное чтение по-русски: высокий рост строчных,
+   свободная межбуквенная, простые формы. Ровно то, что нужно подписи в 13-14 px
+   на почти чёрном фоне.
+   Один вариативный файл на подмножество, вес 400-900 — отдельные начертания
+   не грузим. Всего ~79 КБ на три подмножества.
+   latin-ext здесь не роскошь: в нём живёт ₽ (U+20BD), а рубль на этом сайте
+   в каждом втором блоке. Без него знак валюты падал бы в системный шрифт
+   посреди строки. */
+@font-face {
+  font-family: 'Golos Text';
+  src: url('assets/fonts/GolosText-cyrillic.woff2') format('woff2');
+  font-weight: 400 900;
+  font-style: normal;
+  font-display: swap;
+  unicode-range: U+0301, U+0400-045F, U+0490-0491, U+04B0-04B1, U+2116;
+}
+@font-face {
+  font-family: 'Golos Text';
+  src: url('assets/fonts/GolosText-latin.woff2') format('woff2');
+  font-weight: 400 900;
+  font-style: normal;
+  font-display: swap;
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+}
+@font-face {
+  font-family: 'Golos Text';
+  src: url('assets/fonts/GolosText-latin-ext.woff2') format('woff2');
+  font-weight: 400 900;
+  font-style: normal;
+  font-display: swap;
+  unicode-range: U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF, U+0304, U+0308, U+0329, U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C0, U+2113, U+2C60-2C7F, U+A720-A7FF;
+}
+
 /* Reset & base */
 *, *::before, *::after {
   box-sizing: border-box;
@@ -26,20 +66,34 @@
   --border: #23282c;
   --border-strong: #333a3f;
   --text: #f0f2f4;
-  --muted: #8a9199;
+  /* Подзаголовок героя — не body и не заголовок. Без своего токена он брался
+     из --muted и садился в один тон со сноской под кнопками: три роли одним
+     серым. */
+  --lead: #d3d8dd;
+  /* было #8a9199 — 6:1, проходит AA и всё равно читается вяло: на лендинге
+     основной текст не должен выглядеть отключённым. #a4acb4 даёт 8.4:1. */
+  --muted: #a4acb4;
+  /* Мета и юридический мелкий шрифт: ступень ниже --muted, чтобы спецификация
+     не спорила с текстом. Контраст на --bg = 4.6:1, порог AA держится. */
+  --meta: #767d85;
   --accent: #5ee7b3;
   --accent-dim: #3d9e7a;
   --accent-glow: rgba(94, 231, 179, 0.15);
   --danger: #ff8080;
   --max-width: 1200px;
   --font-display: 'SaarSP', 'LiteralBold', Arial, sans-serif;
-  --font-body: 'Work Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Helvetica Neue', Arial, sans-serif;
+  --font-body: 'Golos Text', -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Helvetica Neue', Arial, sans-serif;
   --ease-out: cubic-bezier(0.16, 1, 0.3, 1);
 
   --z-sticky: 100;
   --z-buybar: 200;
 }
 
+/* Корень намеренно остаётся браузерным (16 px). Через него легко поднять
+   весь сайт одной строкой — но тогда вместе с текстом едут заголовки (у них
+   clamp с rem-границами), кнопки с паддингами в px и вся раскладка.
+   Крупный текст здесь уже настроен, чинить надо было только мелкий, поэтому
+   размеры подняты точечно по ролям ниже, а не корнем. */
 html {
   scroll-behavior: smooth;
 }
@@ -55,13 +109,34 @@ body {
   font-family: var(--font-body);
   background: var(--bg);
   color: var(--text);
-  line-height: 1.7;
-  -webkit-font-smoothing: antialiased;
+  /* 17 px вместо браузерных 16. Крупный текст на странице уже настроен,
+     поэтому размер поднят здесь, а не в html: заголовки живут в clamp с
+     rem-границами и от смены корня поехали бы вместе с раскладкой. */
+  font-size: 1.0625rem;
+  line-height: 1.6;
+  /* Golos вариативный, 400-900. На почти чёрном фоне Regular выглядит рыхлым:
+     светлый штрих на тёмном визуально худеет. 450 возвращает вес, которого
+     ждёшь от 400 на белом, и не читается как полужирный. */
+  font-weight: 450;
+  /* Было antialiased. На тёмной теме это ровно тот переключатель, который
+     срезает у светлого текста часть штриха и делает его серым и «мыльным».
+     Оставляем субпиксельное сглаживание: тот же шрифт, тот же размер, но
+     буквы снова плотные. */
+  -webkit-font-smoothing: auto;
+  -moz-osx-font-smoothing: auto;
+  text-rendering: optimizeLegibility;
 }
 
 img {
   max-width: 100%;
   height: auto;
+  display: block;
+}
+
+/* Скриншоты плагинов завёрнуты в <picture> ради webp-варианта (PNG Faraway —
+   1.4 МБ, webp на 800 px — 15 КБ). Обёртка по умолчанию inline и добавляет
+   строчный отступ под картинкой внутри figure с overflow: hidden. */
+picture {
   display: block;
 }
 
@@ -142,6 +217,13 @@ a {
   }
   .site-header .header-buy {
     display: inline-flex;
+  }
+  /* Кнопка главной существует только ради телефона, где в шапке иначе один
+     логотип. На десктопе там уже есть .nav со ссылками на оба продукта, и
+     раньше кнопки не было — не меняем то, что решено. Правило идёт после
+     общего, специфичность та же, поэтому побеждает порядком. */
+  .site-header .header-buy--mobile {
+    display: none;
   }
 }
 
@@ -288,17 +370,28 @@ p:last-child {
   max-width: 15ch;
 }
 
+/* Строка форматов — спецификация, а не текст. Разрядка и ступень вниз по
+   тону отделяют её от заголовка; без этого она читалась как первая строка
+   абзаца и утяжеляла вход в экран. */
 .hero-meta {
   font-size: 0.875rem;
   font-weight: 500;
-  color: var(--muted);
-  margin-bottom: 20px;
+  letter-spacing: 0.05em;
+  color: var(--meta);
+  margin-bottom: 22px;
 }
 
+/* Второй голос страницы. Был набран как body: тот же серый, тот же
+   межстрочный 1.7 — и обещание продукта весило меньше сноски про демо.
+   Мера 40ch держит его в три строки максимум при любой ширине. */
 .hero-sub {
-  max-width: 52ch;
+  max-width: 40ch;
   margin-bottom: 36px;
-  font-size: clamp(1.0625rem, 1.4vw, 1.1875rem);
+  font-size: clamp(1.1875rem, 1.7vw, 1.4375rem);
+  line-height: 1.42;
+  letter-spacing: -0.005em;
+  color: var(--lead);
+  text-wrap: balance;
 }
 
 .hero-actions {
@@ -407,9 +500,14 @@ p:last-child {
   .demo-caret { transition: none; }
 }
 
+/* Условия демо под кнопками. Держим одной строкой на десктопе: всё, что
+   длиннее, — это уже лицензия и платформы, им место в блоке цены. */
 .hero-fine {
-  font-size: 0.875rem;
+  max-width: 52ch;
   margin-bottom: 0;
+  font-size: 0.875rem;
+  line-height: 1.55;
+  color: var(--meta);
 }
 
 .hero-shot {
@@ -509,7 +607,9 @@ p:last-child {
 
 .step p {
   margin-bottom: 0;
-  font-size: 0.9375rem;
+  max-width: 34ch;
+  font-size: 1rem;
+  line-height: 1.55;
 }
 
 .section-note {
@@ -517,7 +617,7 @@ p:last-child {
   padding-top: 28px;
   border-top: 1px solid var(--border);
   color: var(--muted);
-  font-size: 0.9375rem;
+  font-size: 1rem;
   max-width: none;
 }
 
@@ -546,17 +646,33 @@ p:last-child {
   border-bottom: none;
 }
 
+/* Имя модуля — объект, а не выделенное жирным слово. Раньше dt и dd шли одним
+   Work Sans с разницей в 100 весов, и список читался как четыре одинаковых
+   серых абзаца. Дисплейный шрифт даёт настоящую ступень и рифмуется с шапкой
+   плагина, где модули подписаны так же.
+   ВНИМАНИЕ: в SaarSP нет цифр. Не ставьте в <dt> числа — упадёт в Arial
+   посреди строки. Числа живут в .control-group dt, он остался на body. */
 .case dt {
-  font-family: var(--font-body);
-  font-weight: 600;
-  font-size: 1.0625rem;
-  color: var(--text);
+  font-family: var(--font-display);
+  font-weight: 400;
+  font-size: clamp(1.5rem, 1.9vw, 1.875rem);
+  line-height: 1.15;
+  letter-spacing: 0.035em;
+  color: #fff;
+  /* body стоит на antialiased — на тёмном фоне это срезает у светлого текста
+     примерно четверть штриха. Заголовки крупные и переживают, а узкий SaarSP
+     в размере подписи от этого становился серым и рыхлым. Возвращаем
+     субпиксельное сглаживание точечно: тот же шрифт, тот же размер, но
+     штрих снова полный. */
+  -webkit-font-smoothing: auto;
+  -moz-osx-font-smoothing: auto;
 }
 
 .case dd {
   margin: 0;
+  max-width: 58ch;
+  line-height: 1.55;
   color: var(--muted);
-  max-width: 62ch;
 }
 
 /* Controls */
@@ -897,6 +1013,14 @@ p:last-child {
   transform: translateY(0);
 }
 
+/* Открытый чекаут прячет бар: на телефоне он иначе лежит поверх нижней части
+   формы — как раз там, где кнопка оплаты. Через :has, без JS, поэтому
+   работает и когда диалог открыт не нашим обработчиком. */
+body:has(dialog[open]) .buybar,
+body:has(details.demo[open]) .buybar {
+  transform: translateY(100%);
+}
+
 .buybar-price {
   font-size: 0.9375rem;
   font-weight: 600;
@@ -905,6 +1029,112 @@ p:last-child {
 @media (min-width: 860px) {
   .buybar {
     display: none;
+  }
+}
+
+/* ─────────────────────────────────────────────────────────────────────────
+   МОБИЛЬНАЯ ВИТРИНА — единый блок, ниже десктопного контракта (860px).
+
+   Весь остальной лист построен на min-width, поэтому мобильные правила
+   собраны здесь, в одном месте, а не размазаны по файлу. Граница 860 не
+   случайна: ровно на ней включаются .nav и .header-buy, то есть это и есть
+   переход «телефон/планшет → десктоп». Не заводите отдельный 980/1000 для
+   шапки и кнопок — там другой контракт, двухколоночный герой.
+
+   Измерение, из которого всё следует: кнопке «14 дней бесплатно» нужно
+   269 px, а колонка на экране 390 px даёт 342 px. Две .btn-large в строку
+   не помещаются ни при какой вёрстке — отсюда столбик, а не уменьшение
+   шрифта и не сокращение подписей.
+   ───────────────────────────────────────────────────────────────────────── */
+@media (max-width: 859px) {
+
+  /* --- Кнопки: только столбик, только на всю ширину --- */
+  .hero-actions {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 12px;
+  }
+
+  .hero-actions .btn,
+  .hero-actions .demo,
+  .hero-actions .demo > summary {
+    width: 100%;
+  }
+
+  .btn {
+    min-height: 48px;
+    /* текст кнопки не клипится никогда: лучше две строки, чем обрезок */
+    white-space: normal;
+    text-align: center;
+  }
+
+  /* --- Меню демо: на всю ширину колонки, а не max-content за краем --- */
+  .demo {
+    display: flex;
+  }
+
+  .demo-menu {
+    left: 0;
+    right: 0;
+    width: auto;
+    max-width: none;
+  }
+
+  .demo-option {
+    min-height: 48px;
+  }
+
+  /* --- Шапка: бренд + покупка. Якорное меню на телефон не тащим --- */
+  .site-header .header-buy {
+    display: inline-flex;
+    /* компактнее десктопной: рядом с логотипом на 320 px места мало */
+    padding: 10px 16px;
+    min-height: 40px;
+    font-size: 0.875rem;
+  }
+
+  .logo {
+    font-size: 1.0625rem;
+  }
+
+  .header-inner {
+    gap: 12px;
+  }
+
+  /* --- Под липким баром покупки должен оставаться воздух --- */
+  body:has(.buybar) .site-footer {
+    padding-bottom: calc(88px + env(safe-area-inset-bottom));
+  }
+
+  /* --- Чекаут --- */
+  .checkout {
+    padding: 24px 20px;
+    /* с открытой клавиатурой форма выше экрана: даём ей прокрутиться внутри */
+    max-height: 100dvh;
+    overflow-y: auto;
+  }
+
+  /* 16 px — не вкусовщина, а порог: на всём, что меньше, Safari на iOS
+     зумит страницу при фокусе в поле и обратно уже не отъезжает. */
+  .field input {
+    font-size: 16px;
+    min-height: 48px;
+  }
+
+  .checkout-submit {
+    width: 100%;
+  }
+
+  .checkout-close {
+    width: 44px;
+    height: 44px;
+    top: 8px;
+    right: 8px;
+  }
+
+  /* заголовок не должен подлезать под крестик */
+  .checkout > h2 {
+    padding-right: 44px;
   }
 }
 
