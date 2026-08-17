@@ -1,9 +1,9 @@
 document.documentElement.classList.add('js');
 
 const products = {
-  ricochet: { title: 'Ricochet', price: 2 },
-  faraway: { title: 'Faraway', price: 3 },
-  combo: { title: 'Faraway + Ricochet', price: 4 }
+  ricochet: { title: 'Ricochet', price: 2499 },
+  faraway: { title: 'Faraway', price: 2499 },
+  combo: { title: 'Faraway + Ricochet', price: 3999 }
 };
 
 document.querySelectorAll('.reveal').forEach((el) => {
