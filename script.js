@@ -98,6 +98,24 @@ if (demos.length) {
   });
 }
 
+/* Кнопка «14 дней» в шапке главной. Якорь довозит до панелей продуктов, но
+   пустой скролл — половина действия: сразу раскрываем первое меню демо, чтобы
+   выбор платформы был на экране, а не ещё одним касанием ниже.
+   Ждём окончания плавного скролла: scrollend там, где он есть, иначе таймаут. */
+document.querySelectorAll('[data-open-demo]').forEach((link) => {
+  link.addEventListener('click', () => {
+    const first = document.querySelector('details.demo');
+    if (!first) return;
+    const open = () => { first.open = true; };
+    if ('onscrollend' in window) {
+      window.addEventListener('scrollend', open, { once: true });
+      setTimeout(open, 1200);
+    } else {
+      setTimeout(open, 600);
+    }
+  });
+});
+
 const buybar = document.querySelector('.buybar');
 const heroActions = document.querySelector('.hero-actions');
 const pricing = document.getElementById('pricing');

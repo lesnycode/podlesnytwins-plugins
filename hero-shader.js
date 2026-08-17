@@ -27,11 +27,21 @@
     'precision highp float;',
     'uniform vec2 resolution;',
     'uniform float time;',
+    // 0 — нормировка по короткой стороне (как было), 1 — по длинной.
+    // Зачем это вообще: яркость кольца падает как 1/length(uv), поэтому кольца
+    // живут там, где length(uv) около единицы. На вытянутом вверх канвасе
+    // телефона деление на короткую сторону (ширину) уводит uv.y далеко за ±1,
+    // и от всей картины остаётся горизонтальная полоска по центру, а выше и
+    // ниже — чёрное поле. По длинной стороне кольца заполняют экран целиком.
+    // Значение ставится в resize() по фактическим пропорциям канваса, поэтому
+    // десктоп (широкий канвас) продолжает считаться ровно как раньше.
+    'uniform float longSide;',
     '',
     'float random(in float x) { return fract(sin(x) * 1e4); }',
     '',
     'void main(void) {',
-    '  vec2 uv = (gl_FragCoord.xy * 2.0 - resolution.xy) / min(resolution.x, resolution.y);',
+    '  float base = mix(min(resolution.x, resolution.y), max(resolution.x, resolution.y), longSide);',
+    '  vec2 uv = (gl_FragCoord.xy * 2.0 - resolution.xy) / base;',
     '',
     // мозаичное квантование: из-за него кольца распадаются на ступенчатые штрихи
     '  vec2 mosaic = vec2(4.0, 2.0);',
@@ -105,6 +115,7 @@
 
   var uResolution = gl.getUniformLocation(program, 'resolution');
   var uTime = gl.getUniformLocation(program, 'time');
+  var uLongSide = gl.getUniformLocation(program, 'longSide');
 
   var running = false, rafId = 0, time = 20;
 
@@ -118,6 +129,9 @@
     canvas.height = h;
     gl.viewport(0, 0, w, h);
     gl.uniform2f(uResolution, w, h);
+    // Канвас выше, чем шире — телефон: нормируем по длинной стороне,
+    // иначе кольца схлопываются в полоску по центру. См. uniform longSide.
+    gl.uniform1f(uLongSide, h > w ? 1 : 0);
   }
 
   function draw() {
