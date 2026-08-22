@@ -234,13 +234,22 @@ function purchaseCard(p, limit) {
     actions.append(dl);
   });
 
+  const install = document.createElement('p');
+  install.className = 'muted-note';
+  install.innerHTML =
+    'При первой установке система покажет предупреждение: установщик не подписан '
+    + 'сертификатом разработчика. Это ожидаемо и на работу плагина не влияет.<br>'
+    + '<b>macOS:</b> если двойной клик не открывает пакет — System Settings → '
+    + 'Privacy &amp; Security → пролистать вниз до имени файла → «Открыть всё равно».<br>'
+    + '<b>Windows:</b> в окне SmartScreen нажать «Подробнее» → «Выполнить в любом случае».';
+
   const devHead = document.createElement('p');
   devHead.className = 'devices-head';
   devHead.textContent = p.devices.length
     ? `Занято мест: ${p.devices.length} из ${limit}`
     : `Места активации свободны: ${limit}`;
 
-  card.append(head, actions, devHead);
+  card.append(head, actions, install, devHead);
   p.devices.forEach((d) => card.append(deviceRow(p, d, limit)));
 
   if (p.devices.length) {
